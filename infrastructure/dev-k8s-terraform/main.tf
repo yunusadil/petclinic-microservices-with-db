@@ -18,12 +18,18 @@ variable "sec-gr-k8s-worker" {
   default = "petclinic-k8s-worker-sec-group"
 }
 
+data "aws_vpc" "name" {
+  default = true
+}
+
 resource "aws_security_group" "petclinic-mutual-sg" {
   name = var.sec-gr-mutual
+  vpc_id = data.aws_vpc.name.id
 }
 
 resource "aws_security_group" "petclinic-kube-worker-sg" {
   name = var.sec-gr-k8s-worker
+  vpc_id = data.aws_vpc.name.id
 
   ingress {
     protocol = "tcp"
@@ -66,6 +72,7 @@ resource "aws_security_group" "petclinic-kube-worker-sg" {
 
 resource "aws_security_group" "petclinic-kube-master-sg" {
   name = var.sec-gr-k8s-master
+  vpc_id = data.aws_vpc.name.id
 
   ingress {
     protocol = "tcp"
